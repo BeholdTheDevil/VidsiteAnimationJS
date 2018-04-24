@@ -34,8 +34,10 @@ stop.addEventListener("click", function() {
 	clearCanvas();
 	renderTime(frame, 0);
 
+	//Reset of custom objects
 	titleText.reset();
 	pendulum.reset();
+
 	play.textContent = "Play";
 }, true);
 
@@ -60,10 +62,21 @@ function timeline() {
 	if(frame%2 == 0) {
 
 		clearCanvas();
-		//Animation begins here
 
+		//Animation begins here
+		//Columns
+		columnOne.animate(frame);
+		columnTwo.animate(frame);
+
+		//Pendulum
 		pendulum.animate(frame);
+
+		//Title and formulas
 		titleText.animate(frame);
+		formulaOne.animate(frame);
+		formulaTwo.animate(frame);
+		formulaThree.animate(frame);
+
 
 		//Animation ends here
 		renderTime(frame, ms);
@@ -89,9 +102,9 @@ function renderTime(f, time) {
 
 var titleText = {
 	color: "rgb(250, 250, 230)",
-	xstart: 100,
+	xstart: 75,
 	ystart: -50,
-	x: 100,
+	x: 75,
 	y: -50,
 	text: "Mekanisk energi",
 	start: 0,
@@ -116,12 +129,146 @@ var titleText = {
 	}
 }
 
+var formulaOne = {
+	color: "rgb(103, 131, 193)",
+	textColor: "rgb(250, 250, 230)",
+	text: "E = Ek + Ep",
+	x: 25,
+	y: 25,
+	start: 90,
+	end: 540,
+	animate: function(f) {
+		if(f >= this.start && f <= this.end) {
+			ctx.beginPath();
+			ctx.fillStyle = this.color;
+			ctx.fillRect(this.x, this.y, 100, 35);
+
+			ctx.beginPath();
+			ctx.strokeStyle = this.textColor;
+			ctx.fillStyle = this.textColor;
+			ctx.font = this.font;
+			ctx.fillText(this.text, this.x, this.y);
+		}
+	},
+	reset: function(f) {
+
+	}
+}
+
+var formulaTwo = {
+	color: "rgb(70, 108, 42)",
+	textColor: "rgb(250, 250, 230)",
+	x: 25,
+	y: 65,
+	start: 90,
+	end: 540,
+	animate: function(f) {
+		if(f >= this.start && f <= this.end) {
+			ctx.beginPath();
+			ctx.fillStyle = this.color;
+			ctx.fillRect(this.x, this.y, 100, 35);
+
+			ctx.beginPath();
+			ctx.strokeStyle = this.textColor;
+		}
+	},
+	reset: function(f) {
+
+	}
+}
+
+var formulaThree = {
+	color: "rgb(174, 50, 35)",
+	textColor: "rgb(250, 250, 230)",
+	x: 25,
+	y: 105,
+	start: 90,
+	end: 540,
+	animate: function(f) {
+		if(f >= this.start && f <= this.end) {
+			ctx.beginPath();
+			ctx.fillStyle = this.color;
+			ctx.fillRect(this.x, this.y, 100, 35);
+
+			ctx.beginPath();
+			ctx.strokeStyle = this.textColor;
+		}
+	},
+	reset: function(f) {
+
+	}
+}
+
+var columnOne = {
+	color: "rgb(174, 50, 35)",
+	height: 150,
+	fill: 0,
+	x: 25,
+	y: 305,
+	start: 90,
+	end: 540,
+	animate: function(f) {
+		if(f >= this.start && f <= this.end) {
+			ctx.beginPath();
+			ctx.lineWidth = "2";
+			ctx.strokeStyle = this.color;
+			ctx.rect(this.x, this.y, 50, 150);
+			ctx.stroke();
+
+			//See pendulum
+			var angle = (Math.PI/3) * Math.cos(Math.sqrt(5 / 175) * (f - this.start) - Math.PI);
+			this.fill = angle * (this.height / (Math.PI));
+
+			ctx.beginPath();
+			ctx.fillStyle = this.color;
+			ctx.fillRect(this.x, this.y + this.fill + 65, 50, 150 - this.fill - 65);
+		}
+	},
+	reset: function(f) {
+		this.x = 85;
+		this.y = 300;
+		this.fill = 0;
+	}
+}
+
+var columnTwo = {
+	color: "rgb(70, 108, 42)",
+	height: 150,
+	fill: 150,
+	x: 85,
+	y: 305,
+	start: 90,
+	end: 540,
+	animate: function(f) {
+
+		if(f >= this.start && f <= this.end) {
+			ctx.beginPath();
+			ctx.lineWidth = "2";
+			ctx.strokeStyle = this.color;
+			ctx.rect(this.x, this.y, 50, this.height);
+			ctx.stroke();
+
+			//See pendulum
+			var angle = (Math.PI/3) * Math.cos(Math.sqrt(5 / 175) * (f - this.start));
+			this.fill = angle * (this.height / (Math.PI));
+
+			ctx.beginPath();
+			ctx.fillStyle = this.color;
+			ctx.fillRect(this.x, this.y + this.fill + 65, 50, 150 - this.fill - 65);
+		}
+	},
+	reset: function(f) {
+		this.x = 85;
+		this.ystart = 300;
+		this.fill = 150;
+	}
+}
 
 var pendulum = {
 	color: "rgb(235, 89, 61)",
-	xstart: 320,
+	xstart: 450,
 	ystart: 200,
-	radius: 200,
+	radius: 175,
 	x: 0,
 	y: 0,
 	angle: 0,
